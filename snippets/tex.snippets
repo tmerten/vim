@@ -1,0 +1,125 @@
+version 1
+#emph
+snippet em
+	\\emph{${1}${VISUAL}} ${0}
+#enquote
+snippet enq
+	\\enquote{${1}${VISUAL}} ${0}
+#glossary
+snippet gls
+	\\gls{${1}} $0
+#glossary
+snippet glspl
+	\\glspl{${1}}$0
+# inparanum
+snippet inpara
+	\\begin{inparaenum}[${1:a)}]
+		\\item ${0}
+	\\end{inparaenum}%
+# begin/end
+snippet begin
+	\\begin{${1:what}}
+	\\end{${2:$1}}
+	${0}
+# itemize
+snippet item
+	\\begin{itemize}
+		\\item ${0}
+	\\end{itemize}
+# enumerate
+snippet enum
+	\\begin{enumerate}
+		\\item ${0}
+	\\end{enumerate}
+# add item
+snippet i
+	\\item ${0}
+# Descriptions
+snippet desc \description
+	\\begin{description}
+		\\item[${1:name}] ${0}
+	\\end{description}
+# Chapter
+snippet chap \chapter
+	\\chapter{${1:chapter name}}
+	\\label{chap:${2:${1/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+	${0}
+# Chapter without number
+snippet chap* \chapter*
+	\\chapter{${1:chapter name}}
+	\\label{chap:${2:${1/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+	${0}
+# Section
+snippet sec \section
+	\\section{${1:section name}}
+	\\label{sec:${2:${1/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+	${0}
+# Section
+snippet sub \subsection
+	\\subsection{${1:section name}}
+	\\label{sub:${2:${1/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+	${0}
+# Paragraph
+snippet par \paragraph
+	\\paragraph{${1:paragraph name}}
+	\\label{par:${2:${1/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+	${0}
+# Reference to table
+snippet tab Reference to table
+	Table~\\ref{tab:${1:table name}} ${0}
+# Thorstens table environment
+snippet table Resizeable table environment similar to the one in Springer publications
+	\\begin{table}[${1:htpb}]
+		\\caption{${2:caption}}
+		\\label{tab:${3:${2/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+		\\centering %\\singlespacing
+		% \\resizebox{\\textwidth}{!}{\\begin{minipage}{1.2\\textwidth} %or linewidth
+		%\\rowcolors{2}{white}{verylightgray}
+		\\begin{tabular}{cc}
+			\\hline\\noalign{\\smallskip} %\\toprule
+			% \\multicolumn{6}{c}{summarizing}
+			% \\cline{2-7}\\noalign{\\smallskip} %\\cmidrule(r){2-6}
+			\\hline\\noalign{\\smallskip} %\\midrule
+			$0
+			\\hline %\\noalign{\\smallskip} % add smallskip, if footnotes
+		\\end{tabular}
+		% \\end{minipage}}
+	\\end{table}
+
+snippet table Table for dissertation
+	\\begin{table}[${1:htpb}]
+		\\myfloatalign
+		\\small %\\footnotesize \\scriptsize
+		\\begin{tabularx}{\\textwidth}{${0:Xll}} \\toprule
+			\\tableheadline{TODO} & \\tableheadline{TODO}
+			& \\tableheadline{TODO} \\\\
+			\\midrule
+			TODO & TODO & TODO \\\\
+			TODO & TODO & TODO \\\\
+			\\bottomrule
+		\\end{tabularx}
+		\\caption[${4:$2}]{${2:caption}}
+		\\label{tab:${3:${2/ \\\\|\\\\u/\\\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+	\\end{table}
+
+snippet tikz Tikz figure
+	\\begin{figure}[]
+	\\caption{$1}
+	\\label{fig:${2:${1/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+		%\\resizebox{\\textwidth}{!}{%
+		\centering
+		\\begin{tikzpicture}[$0
+			]
+		\\end{tikzpicture}
+		%}
+	\\end{figure}
+
+snippet figure Figure with includegraphics
+	\\begin{figure}[]
+	\\caption{$1}
+	\\label{fig:${2:${1/ \\|\\u/\\=submatch(0) == ' ' ? '-' : tolower(submatch(0))/g}}}
+		\\centering
+		% width=\\linewidth
+		% clip=true, trim=l b r t (length units)
+		\\includegraphics[scale=1]{$0}
+	\\end{figure}

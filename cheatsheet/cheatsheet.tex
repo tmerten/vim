@@ -1,0 +1,258 @@
+\documentclass[10pt,landscape,a4paper]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+
+\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{Thorstens Personal pdf\LaTeX\ Cheat Sheet}} \\
+\end{center}
+
+
+\section{Editor Settings}
+General settings that apply to every language.
+
+\newlength{\MyLen}
+\settowidth{\MyLen}{\texttt{letterpaper}/\texttt{a4paper} \ }
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+  \verb!:set wrap\!!     & Automatic wrapping on/off\\
+  \verb!:set [no]number! & Line numbering on/off\\
+  \verb!za!              & Fold/Unfold current region\\
+  \verb!zM!              & Fold all\\
+  \verb!zR!              & Unfold (reveal) all
+\end{tabular}
+
+\section{\LaTeX Documents}
+Spell check: \verb!:setlocal spell spelllang=en_us!
+\begin{multicols}{2}
+\verb!\part{!\textit{title}\verb!}!  \\
+\verb!\chapter{!\textit{title}\verb!}!  \\
+\verb!\section{!\textit{title}\verb!}!  \\
+\verb!\subsection{!\textit{title}\verb!}!  \\
+\verb!\subsubsection{!\textit{title}\verb!}!  \\
+\verb!\paragraph{!\textit{title}\verb!}!  \\
+\verb!\subparagraph{!\textit{title}\verb!}!
+\end{multicols}
+{\raggedright
+Use \verb!\setcounter{secnumdepth}{!$x$\verb!}! suppresses heading
+numbers of depth $>x$, where \verb!chapter! has depth 0.
+Use a \texttt{*}, as in \verb!\section*{!\textit{title}\verb!}!,
+to not number a particular item---these items will also not appear
+in the table of contents.
+}
+
+\subsection{References}
+\settowidth{\MyLen}{\texttt{.pageref.marker..}}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\label{!\textit{marker}\verb!}!   &  Set a marker for cross-reference, 
+                          often of the form \verb!\label{sec:item}!. \\
+\verb!\ref{!\textit{marker}\verb!}!   &  Give section/body number of marker. \\
+\verb!\pageref{!\textit{marker}\verb!}! &  Give page number of marker. \\
+\verb!\footnote{!\textit{text}\verb!}!  &  Print footnote at bottom of page. \\
+\end{tabular}
+
+
+\subsection{Floating bodies}
+\settowidth{\MyLen}{\texttt{.begin.equation..place.}}
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+\verb!\begin{table}[!\textit{place}\verb!]!     &  Add numbered table. \\
+\verb!\begin{figure}[!\textit{place}\verb!]!    &  Add numbered figure. \\
+\verb!\begin{equation}[!\textit{place}\verb!]!  &  Add numbered equation. \\
+\verb!\caption{!\textit{text}\verb!}!           &  Caption for the body. \\
+\end{tabular}
+
+The \textit{place} is a list valid placements for the body.  \texttt{t}=top,
+\texttt{h}=here, \texttt{b}=bottom, \texttt{p}=separate page, \texttt{!}=place even if ugly.  Captions and label markers should be within the environment.
+
+
+\subsection{Miscellaneous}
+\verb!\linespread{!$x$\verb!}! changes the line spacing by the
+multiplier $x$.
+
+\section{Math-mode symbols}
+
+% The ordering of these symbols is slightly odd.  This is because I had to put all the
+% long pieces of text in the same column (the right) for it all to fit properly.
+% Otherwise, it wouldn't be possible to fit four columns of symbols here.
+
+\begin{tabular}{@{}l@{\hspace{1ex}}l@{\hspace{1em}}l@{\hspace{1ex}}l@{\hspace{1em}}l@{\hspace{1ex}} l@{\hspace{1em}}l@{\hspace{1ex}}l@{}}
+$\leq$          &  \verb!\leq!  &
+$\geq$          &  \verb!\geq!  &
+$\neq$          &  \verb!\neq!  &
+$\approx$       &  \verb!\approx!  \\
+$\times$        &  \verb!\times!  &
+$\div$          &  \verb!\div!  &
+$\pm$           & \verb!\pm!  &
+$\cdot$         &  \verb!\cdot!  \\
+$^{\circ}$      & \verb!^{\circ}! &
+$\circ$         &  \verb!\circ!  &
+$\prime$        & \verb!\prime!  &
+$\cdots$        &  \verb!\cdots!  \\
+$\infty$        & \verb!\infty!  &
+$\neg$          & \verb!\neg!  &
+$\wedge$        & \verb!\wedge!  &
+$\vee$          & \verb!\vee!  \\
+$\supset$       & \verb!\supset!  &
+$\forall$       & \verb!\forall!  &
+$\in$           & \verb!\in!  &
+$\rightarrow$   &  \verb!\rightarrow! \\
+$\subset$       & \verb!\subset!  &
+$\exists$       & \verb!\exists!  &
+$\notin$        & \verb!\notin!  &
+$\Rightarrow$   &  \verb!\Rightarrow! \\
+$\cup$          & \verb!\cup!  &
+$\cap$          & \verb!\cap!  &
+$\mid$          & \verb!\mid!  &
+$\Leftrightarrow$   &  \verb!\Leftrightarrow! \\
+$\dot a$        & \verb!\dot a!  &
+$\hat a$        & \verb!\hat a!  &
+$\bar a$        & \verb!\bar a!  &
+$\tilde a$      & \verb!\tilde a!  \\
+
+$\alpha$        &  \verb!\alpha!  &
+$\beta$         &  \verb!\beta!  &
+$\gamma$        &  \verb!\gamma!  &
+$\delta$        &  \verb!\delta!  \\
+$\epsilon$      &  \verb!\epsilon!  &
+$\zeta$         &  \verb!\zeta!  &
+$\eta$          &  \verb!\eta!  &
+$\varepsilon$   &  \verb!\varepsilon!  \\
+$\theta$        &  \verb!\theta!  &
+$\iota$         &  \verb!\iota!  &
+$\kappa$        &  \verb!\kappa!  &
+$\vartheta$     &  \verb!\vartheta!  \\
+$\lambda$       &  \verb!\lambda!  &
+$\mu$           &  \verb!\mu!  &
+$\nu$           &  \verb!\nu!  &
+$\xi$           &  \verb!\xi!  \\
+$\pi$           &  \verb!\pi!  &
+$\rho$          &  \verb!\rho!  &
+$\sigma$        &  \verb!\sigma!  &
+$\tau$          &  \verb!\tau!  \\
+$\upsilon$      &  \verb!\upsilon!  &
+$\phi$          &  \verb!\phi!  &
+$\chi$          &  \verb!\chi!  &
+$\psi$          &  \verb!\psi!  \\
+$\omega$        &  \verb!\omega!  &
+$\Gamma$        &  \verb!\Gamma!  &
+$\Delta$        &  \verb!\Delta!  &
+$\Theta$        &  \verb!\Theta!  \\
+$\Lambda$       &  \verb!\Lambda!  &
+$\Xi$           &  \verb!\Xi!  &
+$\Pi$           &  \verb!\Pi!  &
+$\Sigma$        &  \verb!\Sigma!  \\
+$\Upsilon$      &  \verb!\Upsilon!  &
+$\Phi$          &  \verb!\Phi!  &
+$\Psi$          &  \verb!\Psi!  &
+$\Omega$        &  \verb!\Omega!  
+\end{tabular}
+\footnotesize
+
+%\subsection{Special symbols}
+%\begin{tabular}{@{}ll@{}}
+%$^{\circ}$  &  \verb!^{\circ}! Ex: $22^{\circ}\mathrm{C}$: \verb!$22^{\circ}\mathrm{C}$!.
+%\end{tabular}
+
+\section{Bibliography and citations}
+
+\subsection{Citation types}
+\settowidth{\MyLen}{\texttt{.shortciteN.key..}}
+\begin{tabular}{@{}p{\the\MyLen}@{}p{\linewidth-\the\MyLen}@{}}
+\verb!\cite{!\textit{key}\verb!}!       &
+        Full author list and year. (Watson and Crick 1953) \\
+\verb!\citeA{!\textit{key}\verb!}!      &
+        Full author list. (Watson and Crick) \\
+\verb!\citeN{!\textit{key}\verb!}!      &
+        Full author list and year. Watson and Crick (1953) \\
+\verb!\citeyear{!\textit{key}\verb!}!   &
+        Cite year only. (1953) \\
+\end{tabular}
+
+All the above have an \texttt{NP} variant without parentheses;
+Ex. \verb!\citeNP!.
+
+\subsection{Common \BibTeX\ style files}
+\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{3em}}l@{\hspace{1em}}l@{}}
+\verb!abbrv!    &  Standard &
+\verb!abstract! &  \texttt{alpha} with abstract \\
+\verb!alpha!    &  Standard &
+\verb!apa!      &  APA \\
+\verb!plain!    &  Standard &
+\verb!unsrt!    &  Unsorted \\
+\end{tabular}
+
+The \LaTeX\ document should have the following two lines just before
+\verb!\end{document}!, where \verb!bibfile.bib! is the name of the
+\BibTeX\ file.
+\begin{verbatim}
+\bibliographystyle{plain}
+\bibliography{bibfile}
+\end{verbatim}
+
+\rule{0.3\linewidth}{0.25pt}
+\scriptsize
+
+Copyright \copyright\ 2012 Thorsten Merten
+
+(based on Winston Chang's Latex Cheatsheet
+http://www.stdout.org/$\sim$winston/latex/ )
+
+
+\end{multicols}
+\end{document}
+
+
