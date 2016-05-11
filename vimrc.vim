@@ -8,6 +8,7 @@ call plug#begin(basepath.'/plugged')
 
 " COLORS
 Plug 'jonathanfilip/vim-lucius'
+Plug 'chriskempson/base16-vim'
 
 " PLUGINS
 Plug 'tpope/vim-sensible' "some sensible defaults
@@ -16,7 +17,8 @@ Plug 'ervandew/supertab' "tab for the rescue
 
 Plug 'ihacklog/HiCursorWords' "underlines the word under the cursor to see the word in your surrounding
 
-Plug 'vim-scripts/L9' | Plug 'vim-scripts/FuzzyFinder' "cmd-t but fits my needs, vimscipt only, less hassle
+"Plug 'vim-scripts/L9' | Plug 'vim-scripts/FuzzyFinder' "cmd-t but fits my needs, vimscipt only, less hassle
+Plug 'kien/ctrlp.vim'
 
 Plug 'MarcWeber/vim-addon-mw-utils' "needed for snipmate
 Plug 'tomtom/tlib_vim' "needed for snipmate
@@ -54,8 +56,10 @@ call plug#end()
 " ************************************************* 
 "  Theme and Colors
 " ************************************************* 
-set background=dark
-colorscheme lucius
+set background=light
+colorscheme base16-google
+"set background=dark
+"colorscheme lucius
 
 if has("gui_macvim")
   "set guifont=Menlo\ Regular:h13
@@ -150,6 +154,7 @@ set wildmenu
 " list all matches and complete till the longest string
 set wildmode=list:longest
 
+set spellfile=$HOME/Seafile/sys/vim/personal-wordlist.utf-8.add
 " *************************************************
 " Nagivation settings
 " *************************************************
@@ -164,8 +169,8 @@ noremap <S-M-Up>    <C-w>k
 noremap <S-M-Down>  <C-w>j
 "noremap <S-M-Down> :split<CR><C-w>j
 
-noremap <M-D-Left> :bprevious<CR>
-noremap <M-D-Right> :bnext<CR>
+nmap <M-D-Right> <Plug>AirlineSelectNextTab
+nmap <M-D-Left> <Plug>AirlineSelectPrevTab
 
 " who needs umlauts in normal mode? use for next/prev sentence and jump
 nnoremap ö (
@@ -188,6 +193,7 @@ autocmd FileType qf nnoremap <buffer> <Space> <CR>:cclose<CR>:lclose<CR>
     autocmd! BufWritePost $HOME/Seafile/sys/vim/vimrc.vim source %
     autocmd! BufWritePost $HOME/Seafile/sys/vim/vimrc.vim AirlineRefresh
     nnoremap <leader>ev :edit $HOME/Seafile/sys/vim/vimrc.vim"<CR>
+    nnoremap <leader>eg :edit $HOME/Seafile/sys/vim/gvimrc.vim"<CR>
 
     " sort selection alphabetically
     vnoremap <leader>s :sort<CR>
@@ -212,17 +218,28 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#buffer_min_count = 0
 "let g:airline#extensions#tabline#show_close_button = 1
 "let g:airline#extensions#tabline#close_symbol = 'X'
-let g:airline_theme="bubblegum"
+let g:airline_theme="base16"
 
+" ************************************************* 
+" CTRL P Vim
+" *************************************************
+set wildignore+=*/tmp/*,*.*.so,*.*.swp,*.zip,*.exe,*.dll,*.bak,*.orig
+set wildignore+=*.swp,*.skim,*.aux,*.gz,*.zip,*.pdf,*.dvi,*.DS_Store,*.pyc
+set wildignore+=*.acn,*.acr,*.alg,*.bbl,*.blg,*-blx.bib,*.fdb_latexmk
+set wildignore+=*.gls,*.ist,*.lof,*.lol,*.lot,*.out,*.run.xml
+set wildignore+=*.fls,*.fls,*.glg,*.glo,*.synctex.gz,*.toc,*.xdy
+
+let g:ctrlp_map = '<D-t>'
+let g:ctrlp_match_window = 'top,order:ttb,min:1,max:15'
 
 " ************************************************* 
 " Fuzzy Finder
 " *************************************************
-nnoremap <leader>m :FufBuffer<cr>
-nnoremap <leader>l :FufLine<cr>
-nnoremap <leader>c :FufChanceList<cr>
-nnoremap <D-BS> :FufJumpList<CR>
-let g:fuf_buffer_keyDelete = "<BS>"
+"nnoremap <leader>m :FufBuffer<cr>
+"nnoremap <leader>l :FufLine<cr>
+"nnoremap <leader>c :FufChanceList<cr>
+"nnoremap <D-BS> :FufJumpList<CR>
+"let g:fuf_buffer_keyDelete = "<BS>"
 
 " Exclude files that end on...
 let g:fuf_coveragefile_exclude = '\v\~$|\.(o|exe|dll|bak|orig|swp|skim|aux|gz|zip|pdf|dvi|DS_Store|pyc)$'
@@ -333,8 +350,8 @@ autocmd FileType tex nmap <leader>lg <Plug>(vimtex-status)
 autocmd FileType tex nmap <leader>lG <Plug>(vimtex-status-all)
 autocmd FileType tex nmap <leader>lt <Plug>(vimtex-toc-toggle)
 autocmd FileType tex nmap <leader>lv <Plug>(vimtex-view)
-autocmd FileType tex nmap <leader>t <plug>(vimtex-toc-toggle)
-autocmd FileType tex set spell spelllang=en_us
+autocmd FileType tex nmap <leader>t <Plug>(vimtex-toc-toggle)
+autocmd FileType tex set spell spelllang=en_us,de_de
 autocmd FileType tex let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 autocmd FileType tex let g:HiCursorWords_hiGroupRegexp='Special\|Statement\|texCmdName\|Special'
 
