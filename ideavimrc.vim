@@ -13,6 +13,8 @@ set incsearch
 set showmatch
 set hlsearch
 
+inoremap jk <Esc>
+
 " clear the search buffer when hitting ESC
 nnoremap <Esc> :nohlsearch<CR><Esc>
 

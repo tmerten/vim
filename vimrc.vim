@@ -13,6 +13,10 @@ Plug 'chriskempson/base16-vim'
 " PLUGINS
 Plug 'tpope/vim-sensible' "some sensible defaults
 
+Plug 'tpope/vim-surround' "surround stuff and change surroundings
+
+Plug 'tpope/vim-repeat' " enable to repeat stuff done by (some) plugins with .
+
 Plug 'ervandew/supertab' "tab for the rescue
 
 Plug 'ihacklog/HiCursorWords' "underlines the word under the cursor to see the word in your surrounding
@@ -25,6 +29,9 @@ Plug 'tomtom/tlib_vim' "needed for snipmate
 Plug 'garbas/vim-snipmate' "text-mate style snippets
 
 Plug 'lervag/vimtex' "latex
+Plug 'gibiansky/vim-latex-objects'
+
+Plug 'suan/vim-instant-markdown' "markdown previewer, requires node.js --> npm -g install instant-markdown-d
 
 Plug 'vim-scripts/vcscommand.vim' "svn, git, ... client
 
@@ -138,7 +145,7 @@ set ttyfast
 
 " set indention to 2 and soft tabs
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-"autocmd FileType tex setlocal softtabstop=2 expandtab
+autocmd FileType tex setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 autocmd FileType make setlocal tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab
 
 " make numbers display relative around the current cursor
@@ -154,7 +161,7 @@ set wildmenu
 " list all matches and complete till the longest string
 set wildmode=list:longest
 
-set spellfile=$HOME/Seafile/sys/vim/personal-wordlist.utf-8.add
+let &spellfile=basepath.'/personal-wordlist.utf-8.add'
 " *************************************************
 " Nagivation settings
 " *************************************************
@@ -178,25 +185,27 @@ nnoremap ä )
 nnoremap ü <C-]>
 
 " jump inside help with enter and backspace
-autocmd FileType help :nnoremap <buffer> <CR> <C-]>
-autocmd FileType help :nnoremap <buffer> <BS>  <C-t>
+autocmd FileType help nnoremap <buffer> <CR> <C-]>
+autocmd FileType help nnoremap <buffer> <BS>  <C-t>
+autocmd FileType help nnoremap <buffer> <Esc> :bdelete<CR>
 
 " select and close quickfix window by pressing Space instead of CR
 autocmd FileType qf nnoremap <buffer> <Space> <CR>:cclose<CR>:lclose<CR>
+autocmd FileType qf nnoremap <buffer> <Esc> :bdelete<CR>
 
 " *************************************************
 " Modification mappings
 " *************************************************
 
 " source the vimrc automatically on write 
-    " (does not prevent you from restarting vim)
-    autocmd! BufWritePost $HOME/Seafile/sys/vim/vimrc.vim source %
-    autocmd! BufWritePost $HOME/Seafile/sys/vim/vimrc.vim AirlineRefresh
-    nnoremap <leader>ev :edit $HOME/Seafile/sys/vim/vimrc.vim"<CR>
-    nnoremap <leader>eg :edit $HOME/Seafile/sys/vim/gvimrc.vim"<CR>
+" (does not prevent you from restarting vim)
+autocmd! BufWritePost $HOME/Seafile/sys/vim/vimrc.vim source $HOME/Seafile/sys/vim/vimrc.vim
+autocmd! BufWritePost $HOME/Seafile/sys/vim/vimrc.vim AirlineRefresh
+nnoremap <leader>ev :edit $HOME/Seafile/sys/vim/vimrc.vim"<CR>
+nnoremap <leader>eg :edit $HOME/Seafile/sys/vim/gvimrc.vim"<CR>
 
-    " sort selection alphabetically
-    vnoremap <leader>s :sort<CR>
+" sort selection alphabetically
+vnoremap <leader>s :sort<CR>
 
 " make visual mode permanent when using <> for indentation
 vnoremap < <gv
@@ -261,7 +270,7 @@ let g:netrw_list_hide= '.*\.swp$,\.svn$'
 " *************************************************
 let g:syntastic_python_python_exec = '/usr/local/var/pyenv/shims/python'
 let g:syntastic_check_on_wq = 0
-let g:syntastic_python_pylint_args = '--max-line-length=110 --disable=C0330 --method-rgx "[a-z_][a-z0-9_]{2,60}$"'
+let g:syntastic_python_pylint_args = '--max-line-length=140 --disable=C0330 --method-rgx "[a-z_][a-z0-9_]{2,60}$" --init-hook="import sys; sys.path.append(\".\")"'
 " allow longer lines, disable bad-continuation warnings (not my style), allow longer method names
 let g:syntastic_error_symbol = "☢"
 let g:syntastic_warning_symbol = "⚠"
@@ -303,7 +312,7 @@ let g:tagbar_width = 40
 let g:tagbar_foldlevel = 3
 set tags=./tags;
 let &tags=&tags.basepath.'/tags'
-nnoremap <leader>t :TagbarToggle<cr>
+nnoremap <leader>t :TagbarToggle<cr>:normal! <c-w>l<cr>
 "let g:tagbar_type_tex = {
   "\ 'ctagstype' : 'latex',
   "\ 'kinds' : [
@@ -365,28 +374,28 @@ let g:local_vimrc = {'names':['vimrc.local'],'hash_fun':'LVRHashOfFile'}
 " *************************************************
 function! StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
+    let l:_s=@/
+    let l:l = line(".")
+    let l:c = col(".")
     " Do the business:
     %s/\s\+$//e
     " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
+    let @/=l:_s
+    call cursor(l:l, l:c)
 endfunction
 
 function! CreateLatexLabel()
     " Preparation: save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
+    let l:_s=@/
+    let l:l = line(".")
     " Do the business:
     :normal yypVu
     :s/ /-/ge
     :normal ct{\label
     :normal la:
     " Clean up: move cursor before label
-    let @/=_s
-    call cursor(l+1,8)
+    let @/=l:_s
+    call cursor(l:l+1,8)
 endfunction
 
 autocmd BufWritePre *.py,*.rb,*.js,*.rhtml,*.html,*.java,*.tex :call StripTrailingWhitespaces()
