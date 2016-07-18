@@ -64,7 +64,7 @@ call plug#end()
 "  Theme and Colors
 " ************************************************* 
 set background=light
-colorscheme base16-google
+colorscheme base16-google-light
 "set background=dark
 "colorscheme lucius
 
@@ -336,7 +336,7 @@ let g:vimtex_fold_enabled = 0
 let g:vimtex_mappings_enabled = 0
 let g:vimtex_quickfix_mode = 2
 let g:vimtex_quickfix_open_on_warning = 0
-let g:vimtex_latexmk_options = '-pdf -pdflatex="pdflatex -synctex=1 \%O \%S"'
+let g:vimtex_latexmk_options = '-pdf -verbose -pdflatex="pdflatex -file-line-error -synctex=1 \%O \%S"'
 
 " Use skim
 let g:vimtex_view_method = 'general'
@@ -396,6 +396,26 @@ function! CreateLatexLabel()
     " Clean up: move cursor before label
     let @/=l:_s
     call cursor(l:l+1,8)
+endfunction
+
+nnoremap <leader>gr :set operatorfunc=<SID>GrepOperator<cr>g@
+vnoremap <leader>gr :<c-u>call <SID>GrepOperator(visualmode())<cr>
+
+function! s:GrepOperator(type)
+    let saved_unnamed_register = @@
+
+    if a:type ==# 'v'
+        normal! `<v`>y
+    elseif a:type ==# 'char'
+        normal! `[v`]y
+    else
+        return
+    endif
+
+    silent execute "grep! -R " . shellescape(@@) . " *." . &filetype
+    copen
+
+    let @@ = saved_unnamed_register
 endfunction
 
 autocmd BufWritePre *.py,*.rb,*.js,*.rhtml,*.html,*.java,*.tex :call StripTrailingWhitespaces()
