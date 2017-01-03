@@ -33,7 +33,12 @@ Plug 'gibiansky/vim-latex-objects'
 
 Plug 'suan/vim-instant-markdown' "markdown previewer, requires node.js --> npm -g install instant-markdown-d
 
-Plug 'vim-scripts/vcscommand.vim' "svn, git, ... client
+"Plug 'vim-scripts/vcscommand.vim' "svn, git, ... client --> these were the old days, now we are using GIT
+
+" emmet expands js selector style snippets into accorings html
+"Plug 'mattn/emmet-vim'
+
+Plug 'tpope/vim-fugitive'
 
 Plug 'scrooloose/nerdcommenter' "cc, ci, cu
 
@@ -54,6 +59,8 @@ Plug 'terryma/vim-multiple-cursors' "sublime like multiple cursors with c-n
 Plug 'MarcWeber/vim-addon-local-vimrc' "source local vimrcs (e.g. to define latex-specific abbrevs)
 
 Plug 'godlygeek/tabular'
+
+Plug 'sjl/gundo.vim'
 
 " minimaps, both don't work for me
 "Plug 'severin-lemaignan/vim-minimap'
@@ -125,7 +132,7 @@ let g:HiCursorWords_hiGroupRegexp='' " does not work correctly with other plugin
 let g:HiCursorWords_debugEchoHiName = 0
 
 " set the minimum number of lines above and below the cursor
-set scrolloff=9
+set scrolloff=4
 
 " copy the intention of the previous line to the new line
 set autoindent
@@ -146,7 +153,10 @@ set ttyfast
 " set indention to 2 and soft tabs
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 autocmd FileType tex setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+autocmd FileType html setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 autocmd FileType make setlocal tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab
+autocmd FileType bash setlocal tabstop=4 softtabstop=0 shiftwidth=4 expandtab
+autocmd FileType sh setlocal tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab
 
 " make numbers display relative around the current cursor
 set relativenumber " number
@@ -206,6 +216,7 @@ nnoremap <leader>eg :edit $HOME/Seafile/sys/vim/gvimrc.vim"<CR>
 
 " sort selection alphabetically
 vnoremap <leader>s :sort<CR>
+nnoremap <leader>s z=
 
 " make visual mode permanent when using <> for indentation
 vnoremap < <gv
@@ -215,6 +226,11 @@ vnoremap > >gv
 inoremap <c-u> <esc>viwUea
 nnoremap <c-u> viwU
 
+" Delete in visual mode preserving the yanked register
+xnoremap <leader>p "_dP
+
+" map Gundo, the graphical undo tree
+nnoremap <leader>u :GundoToggle<CR>
 
 " *************************************************
 " VIM-Airline
@@ -291,6 +307,11 @@ nnoremap <leader>b iimport pdb; pdb.set_trace()<ESC>
 autocmd FileType python let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 "autocmd FileType python let g:HiCursorWords_hiGroupRegexp='Function\|Statement\|Identifier\|Constant\|CursorLine.*'
 
+
+" ************************************************* 
+" json
+" ************************************************* 
+autocmd FileType json nnoremap = :%!python -m json.tool<cr>
 
 " ************************************************* 
 " Python Mode (python, pymode)
@@ -401,6 +422,10 @@ endfunction
 nnoremap <leader>gr :set operatorfunc=<SID>GrepOperator<cr>g@
 vnoremap <leader>gr :<c-u>call <SID>GrepOperator(visualmode())<cr>
 
+" Instant-Markdown md
+let g:instant_markdown_autostart=0
+nnoremap <leader>lv :InstantMarkdownPreview<cr>
+
 function! s:GrepOperator(type)
     let saved_unnamed_register = @@
 
@@ -412,10 +437,12 @@ function! s:GrepOperator(type)
         return
     endif
 
-    silent execute "grep! -R " . shellescape(@@) . " *." . &filetype
+    silent execute "grep! --recursive " . shellescape(@@) . " *." . &filetype
     copen
 
     let @@ = saved_unnamed_register
 endfunction
 
 autocmd BufWritePre *.py,*.rb,*.js,*.rhtml,*.html,*.java,*.tex :call StripTrailingWhitespaces()
+
+com! FormatJSON %!python -m json.tool
